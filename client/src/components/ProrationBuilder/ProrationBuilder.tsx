@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
 import { Card, InputNumber, Form, Button } from 'antd';
 import { InvestorToggleForm } from '../InvestorToggleForm/InvestorToggleForm';
-import { Investment, createInvestment } from '../../typeDefs';
+import {
+  Investment,
+  createInvestment,
+  ProrateRequest,
+  FieldData,
+} from '../../typeDefs';
 
 export const ProrationBuilder = () => {
+  const [allocationAmount, setAllocationAmount] = useState<number>(0);
   const [investmentList, setInvestmentList] = useState<Investment[]>([
     createInvestment(),
   ]);
@@ -31,16 +37,41 @@ export const ProrationBuilder = () => {
     setInvestmentList(newInvestorList);
   };
 
+  const prorateFetch = async (reqBody: ProrateRequest) => {
+    const API_URL = `http://localhost:8000/prorate`;
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(reqBody),
+    });
+    return response.json();
+  };
+
   const handleProrate = () => {
-    // Make API Request Here, and update the state
+    // Turn UI state -> ProrateRequest
+    // const prorateRequestBody =
+    // Make API Request Here
+  };
+
+  const handleAllocationChange = (allFields: FieldData[]) => {
+    const [allocationAmountField] = allFields;
+    setAllocationAmount(allocationAmountField.value);
   };
 
   return (
     <div>
       <h1>Proration Tool</h1>
       <Card>
-        <Form layout='vertical'>
-          <Form.Item label='Total Allocation Amount' name='allocation'>
+        <Form
+          layout='vertical'
+          initialValues={{ allocationAmount }}
+          onFieldsChange={(changedFields, allFields) => {
+            handleAllocationChange(allFields as FieldData[]);
+          }}
+        >
+          <Form.Item label='Total Allocation Amount' name='allocationAmount'>
             <InputNumber />
           </Form.Item>
         </Form>

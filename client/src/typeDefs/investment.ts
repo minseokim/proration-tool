@@ -19,3 +19,14 @@ export const createInvestment = (
     average_amount,
   };
 };
+
+export interface InvestmentData {
+  name: string;
+  requested_amount: number;
+  average_amount: number;
+}
+
+export interface ProrateRequest {
+  allocation_amount: number;
+  investor_amounts: InvestmentData[];
+}

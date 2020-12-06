@@ -1,15 +1,8 @@
 import React from 'react';
 import { Button, Form, Input, InputNumber } from 'antd';
 import { MinusOutlined } from '@ant-design/icons';
-import { Investment } from '../../typeDefs';
+import { Investment, FieldData } from '../../typeDefs';
 
-interface FieldData {
-  touched: boolean;
-  validating: boolean;
-  errors: string[];
-  name: string[];
-  value: any;
-}
 interface InvestorToggleFormProps {
   onRemoveInvestment: (id: string) => void;
   onUpdateInvestment: (
