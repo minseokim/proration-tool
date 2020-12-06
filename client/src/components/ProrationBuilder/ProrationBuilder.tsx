@@ -6,6 +6,7 @@ import {
   createInvestment,
   ProrateRequest,
   FieldData,
+  InvestmentData,
 } from '../../typeDefs';
 
 export const ProrationBuilder = () => {
@@ -49,9 +50,32 @@ export const ProrationBuilder = () => {
     return response.json();
   };
 
+  const generateProrateRequest = (
+    allocationAmount: number,
+    investmentList: Investment[]
+  ): ProrateRequest => {
+    return {
+      allocation_amount: allocationAmount,
+      investor_amounts: investmentList.map(
+        (investment): InvestmentData => {
+          const { name, average_amount, requested_amount } = investment;
+          return {
+            name,
+            average_amount,
+            requested_amount,
+          };
+        }
+      ),
+    };
+  };
+
   const handleProrate = () => {
     // Turn UI state -> ProrateRequest
-    // const prorateRequestBody =
+    prorateFetch(generateProrateRequest(allocationAmount, investmentList)).then(
+      (res) => {
+        console.log('result :', res);
+      }
+    );
     // Make API Request Here
   };
 
@@ -88,7 +112,9 @@ export const ProrationBuilder = () => {
           );
         })}
         <Form.Item>
-          <Button type='primary'>Prorate</Button>
+          <Button type='primary' onClick={handleProrate}>
+            Prorate
+          </Button>
           <Button onClick={handleAddInvestment} type='primary'>
             Add Investor
           </Button>
