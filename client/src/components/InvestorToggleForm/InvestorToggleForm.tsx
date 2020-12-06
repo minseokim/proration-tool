@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Form, Input, InputNumber } from 'antd';
 import { MinusOutlined } from '@ant-design/icons';
-import { Investor } from '../../typeDefs';
+import { Investment } from '../../typeDefs';
 
 interface FieldData {
   touched: boolean;
@@ -11,45 +11,36 @@ interface FieldData {
   value: any;
 }
 interface InvestorToggleFormProps {
-  onRemoveInvestor: (id: string) => void;
-  onUpdateInvestor: (
+  onRemoveInvestment: (id: string) => void;
+  onUpdateInvestment: (
     id: string,
     name: string,
-    requestedInvestmentAmount: number,
-    averageInvestmentSize: number
+    requestedAmount: number,
+    averageAmount: number
   ) => void;
   index: number;
-  investor: Investor;
+  investment: Investment;
 }
 
 export const InvestorToggleForm = ({
   index,
-  investor,
-  onRemoveInvestor,
-  onUpdateInvestor,
+  investment,
+  onRemoveInvestment,
+  onUpdateInvestment,
 }: InvestorToggleFormProps) => {
   //   const onValuesChange = (evt) => {
   //     console.log('evt values change :', evt);
   //   };
-  const {
-    id,
-    name,
-    requestedInvestmentAmount,
-    averageInvestmentSize,
-  } = investor;
+  const { id, name, requested_amount, average_amount } = investment;
 
   const onFieldsChange = (allFields: FieldData[]) => {
     console.log('allFields :', allFields);
-    const [
-      nameField,
-      requestedInvestmentAmountField,
-      averageInvestmentSizeField,
-    ] = allFields;
-    onUpdateInvestor(
+    const [nameField, requestedAmountField, averageAmountField] = allFields;
+    onUpdateInvestment(
       id,
       nameField.value,
-      requestedInvestmentAmountField.value,
-      averageInvestmentSizeField.value
+      requestedAmountField.value,
+      averageAmountField.value
     );
   };
 
@@ -60,20 +51,20 @@ export const InvestorToggleForm = ({
       onFieldsChange={(changedFields, allFields) =>
         onFieldsChange(allFields as FieldData[])
       }
-      initialValues={{ name, requestedInvestmentAmount, averageInvestmentSize }}
+      initialValues={{ name, requested_amount, average_amount }}
     >
       <Form.Item label='Name' name='name'>
         <Input value={name} />
       </Form.Item>
-      <Form.Item label='Requested Amount' name='requestedInvestmentAmount'>
+      <Form.Item label='Requested Amount' name='requested_amount'>
         <InputNumber />
       </Form.Item>
-      <Form.Item label='Average Amount' name='averageInvestmentSize'>
+      <Form.Item label='Average Amount' name='average_amount'>
         <InputNumber />
       </Form.Item>
       {index ? (
         <Button
-          onClick={() => onRemoveInvestor(id)}
+          onClick={() => onRemoveInvestment(id)}
           icon={<MinusOutlined />}
         ></Button>
       ) : null}

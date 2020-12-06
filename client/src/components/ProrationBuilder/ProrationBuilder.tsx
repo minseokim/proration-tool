@@ -1,39 +1,38 @@
 import React, { useState } from 'react';
 import { Card, InputNumber, Form, Button } from 'antd';
 import { InvestorToggleForm } from '../InvestorToggleForm/InvestorToggleForm';
-import { Investor, createInvestor } from '../../typeDefs';
+import { Investment, createInvestment } from '../../typeDefs';
 
 export const ProrationBuilder = () => {
-  const [investorList, setInvestorList] = useState<Investor[]>([
-    createInvestor(),
+  const [investmentList, setInvestmentList] = useState<Investment[]>([
+    createInvestment(),
   ]);
 
-  const handleRemoveInvestor = (id: string) => {
-    setInvestorList(investorList.filter((investor) => investor.id !== id));
+  const handleRemoveInvestment = (id: string) => {
+    setInvestmentList(investmentList.filter((investor) => investor.id !== id));
   };
 
-  const handleAddInvestor = () => {
-    setInvestorList([...investorList, createInvestor()]);
+  const handleAddInvestment = () => {
+    setInvestmentList([...investmentList, createInvestment()]);
   };
 
-  const handleUpdateInvestor = (
+  const handleUpdateInvestment = (
     id: string,
     name: string,
-    requestedInvestmentAmount: number,
-    averageInvestmentSize: number
+    requestedAmount: number,
+    averageAmount: number
   ) => {
-    const newInvestorList = investorList.map((investor) => {
+    const newInvestorList = investmentList.map((investor) => {
       if (investor.id === id) {
-        return createInvestor(
-          id,
-          name,
-          requestedInvestmentAmount,
-          averageInvestmentSize
-        );
+        return createInvestment(id, name, requestedAmount, averageAmount);
       }
       return investor;
     });
-    setInvestorList(newInvestorList);
+    setInvestmentList(newInvestorList);
+  };
+
+  const handleProrate = () => {
+    // Make API Request Here, and update the state
   };
 
   return (
@@ -45,21 +44,21 @@ export const ProrationBuilder = () => {
             <InputNumber />
           </Form.Item>
         </Form>
-        {/* List of Investor Forms */}
-        {investorList?.map((investor, index) => {
+        {/* List of Investment Forms */}
+        {investmentList?.map((investment, index) => {
           return (
             <InvestorToggleForm
-              key={investor.id}
+              key={investment.id}
               index={index}
-              investor={investor}
-              onRemoveInvestor={handleRemoveInvestor}
-              onUpdateInvestor={handleUpdateInvestor}
+              investment={investment}
+              onRemoveInvestment={handleRemoveInvestment}
+              onUpdateInvestment={handleUpdateInvestment}
             />
           );
         })}
         <Form.Item>
           <Button type='primary'>Prorate</Button>
-          <Button onClick={handleAddInvestor} type='primary'>
+          <Button onClick={handleAddInvestment} type='primary'>
             Add Investor
           </Button>
         </Form.Item>
