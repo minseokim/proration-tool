@@ -1,0 +1,5 @@
+export const outputOne = {
+  'Investor A': 97.96875,
+  'Investor B': 1.03125,
+  'Investor C': 1,
+};

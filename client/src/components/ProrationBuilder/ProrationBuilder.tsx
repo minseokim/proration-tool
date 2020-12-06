@@ -39,7 +39,7 @@ export const ProrationBuilder = () => {
   };
 
   const prorateFetch = async (reqBody: ProrateRequest) => {
-    const API_URL = `http://localhost:8000/prorate`;
+    const API_URL = `/prorate`;
     const response = await fetch(API_URL, {
       method: 'POST',
       headers: {
