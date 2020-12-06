@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, InputNumber, Form, Input, Button } from 'antd';
+import { Card, InputNumber, Form, Button } from 'antd';
 import { InvestorToggleForm } from '../InvestorToggleForm/InvestorToggleForm';
 import { Investor, createInvestor } from '../../typeDefs';
 
@@ -9,8 +9,6 @@ export const ProrationBuilder = () => {
   ]);
 
   const handleRemoveInvestor = (id: string) => {
-    console.log('removing investor :', id);
-
     setInvestorList(investorList.filter((investor) => investor.id !== id));
   };
 

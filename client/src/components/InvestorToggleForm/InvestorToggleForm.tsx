@@ -3,6 +3,13 @@ import { Button, Form, Input, InputNumber } from 'antd';
 import { MinusOutlined } from '@ant-design/icons';
 import { Investor } from '../../typeDefs';
 
+interface FieldData {
+  touched: boolean;
+  validating: boolean;
+  errors: string[];
+  name: string[];
+  value: any;
+}
 interface InvestorToggleFormProps {
   onRemoveInvestor: (id: string) => void;
   onUpdateInvestor: (
@@ -31,13 +38,13 @@ export const InvestorToggleForm = ({
     averageInvestmentSize,
   } = investor;
 
-  const onFieldsChange = (allFields) => {
+  const onFieldsChange = (allFields: FieldData[]) => {
+    console.log('allFields :', allFields);
     const [
       nameField,
       requestedInvestmentAmountField,
       averageInvestmentSizeField,
     ] = allFields;
-    console.log('allFields :', nameField);
     onUpdateInvestor(
       id,
       nameField.value,
@@ -50,8 +57,9 @@ export const InvestorToggleForm = ({
   return (
     <Form
       layout='inline'
-      onFieldsChange={(changedFields, allFields) => onFieldsChange(allFields)}
-      //   onValuesChange={onValuesChange}
+      onFieldsChange={(changedFields, allFields) =>
+        onFieldsChange(allFields as FieldData[])
+      }
       initialValues={{ name, requestedInvestmentAmount, averageInvestmentSize }}
     >
       <Form.Item label='Name' name='name'>
