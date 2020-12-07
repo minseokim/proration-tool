@@ -1,0 +1,8 @@
+.proration-summary {
+    height: 100%;
+    padding: 48px 48px 48px 0px;
+}
+
+.proration-summary--card {
+    min-height: 70%
+}

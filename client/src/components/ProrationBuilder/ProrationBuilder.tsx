@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Card, InputNumber, Form, Button } from 'antd';
-import { InvestorToggleForm } from '../InvestorToggleForm/InvestorToggleForm';
+import { Card, InputNumber, Form, Button, Input, Space } from 'antd';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+
 import {
   Investment,
   createInvestment,
@@ -8,6 +9,9 @@ import {
   FieldData,
   InvestmentData,
 } from '../../typeDefs';
+import { prorateFetch } from '../../lib';
+
+import './ProrationBuilder.css';
 
 export const ProrationBuilder = () => {
   const [allocationAmount, setAllocationAmount] = useState<number>(0);
@@ -38,18 +42,6 @@ export const ProrationBuilder = () => {
     setInvestmentList(newInvestorList);
   };
 
-  const prorateFetch = async (reqBody: ProrateRequest) => {
-    const API_URL = `/prorate`;
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(reqBody),
-    });
-    return response.json();
-  };
-
   const generateProrateRequest = (
     allocationAmount: number,
     investmentList: Investment[]
@@ -70,13 +62,13 @@ export const ProrationBuilder = () => {
   };
 
   const handleProrate = () => {
-    // Turn UI state -> ProrateRequest
-    prorateFetch(generateProrateRequest(allocationAmount, investmentList)).then(
-      (res) => {
+    prorateFetch(generateProrateRequest(allocationAmount, investmentList))
+      .then((res) => {
         console.log('result :', res);
-      }
-    );
-    // Make API Request Here
+      })
+      .catch((err) => {
+        console.log('error :', err);
+      });
   };
 
   const handleAllocationChange = (allFields: FieldData[]) => {
@@ -85,40 +77,77 @@ export const ProrationBuilder = () => {
   };
 
   return (
-    <div>
+    <div className='proration-builder'>
       <h1>Proration Tool</h1>
-      <Card>
+      <Card className='proration-builder--card'>
         <Form
-          layout='vertical'
+          layout='horizontal'
           initialValues={{ allocationAmount }}
           onFieldsChange={(changedFields, allFields) => {
             handleAllocationChange(allFields as FieldData[]);
           }}
         >
-          <Form.Item label='Total Allocation Amount' name='allocationAmount'>
+          <Form.Item label='Total Available Allocation' name='allocationAmount'>
             <InputNumber />
           </Form.Item>
+          {/* List of Investment Forms */}
+          <Form.List name='investments'>
+            {(fields, { add, remove }) => {
+              return (
+                <>
+                  {investmentList?.map((investment, index) => {
+                    return (
+                      <div key={investment.id} className='form-list'>
+                        <Space>
+                          <Form.Item label='Name' name='name'>
+                            <Input value={investment.name} />
+                          </Form.Item>
+                          <Form.Item
+                            label='Requested Amount'
+                            name='requested_amount'
+                          >
+                            <InputNumber />
+                          </Form.Item>
+                          <Form.Item
+                            label='Average Amount'
+                            name='average_amount'
+                          >
+                            <InputNumber />
+                          </Form.Item>
+                          <Form.Item>
+                            {index ? (
+                              <Button
+                                icon={<MinusCircleOutlined />}
+                                onClick={() => {
+                                  handleRemoveInvestment(investment.id);
+                                }}
+                              ></Button>
+                            ) : null}
+                          </Form.Item>
+                        </Space>
+                      </div>
+                    );
+                  })}
+                  <Form.Item>
+                    <Button
+                      type='dashed'
+                      onClick={handleAddInvestment}
+                      block
+                      icon={<PlusOutlined />}
+                    >
+                      Add Investor
+                    </Button>
+                  </Form.Item>
+                </>
+              );
+            }}
+          </Form.List>
+          <Form.Item>
+            <Button type='primary' onClick={handleProrate}>
+              Prorate
+            </Button>
+          </Form.Item>
         </Form>
-        {/* List of Investment Forms */}
-        {investmentList?.map((investment, index) => {
-          return (
-            <InvestorToggleForm
-              key={investment.id}
-              index={index}
-              investment={investment}
-              onRemoveInvestment={handleRemoveInvestment}
-              onUpdateInvestment={handleUpdateInvestment}
-            />
-          );
-        })}
-        <Form.Item>
-          <Button type='primary' onClick={handleProrate}>
-            Prorate
-          </Button>
-          <Button onClick={handleAddInvestment} type='primary'>
-            Add Investor
-          </Button>
-        </Form.Item>
       </Card>
     </div>
   );

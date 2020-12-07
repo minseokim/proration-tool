@@ -39,13 +39,7 @@ export const InvestorToggleForm = ({
 
   // Needs to hold state for
   return (
-    <Form
-      layout='inline'
-      onFieldsChange={(changedFields, allFields) =>
-        onFieldsChange(allFields as FieldData[])
-      }
-      initialValues={{ name, requested_amount, average_amount }}
-    >
+    <>
       <Form.Item label='Name' name='name'>
         <Input value={name} />
       </Form.Item>
@@ -61,6 +55,6 @@ export const InvestorToggleForm = ({
           icon={<MinusOutlined />}
         ></Button>
       ) : null}
-    </Form>
+    </>
   );
 };

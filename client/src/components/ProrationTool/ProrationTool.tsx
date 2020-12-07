@@ -7,7 +7,7 @@ import { Row, Col } from 'antd';
 export const ProrationTool = () => {
   return (
     <div className='container'>
-      <Row>
+      <Row className='row-full-height'>
         <Col flex={7}>
           <ProrationBuilder />
         </Col>

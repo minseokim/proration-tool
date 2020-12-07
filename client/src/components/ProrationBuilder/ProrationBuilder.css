@@ -1,0 +1,13 @@
+.proration-builder {
+    height: 100%;
+    padding: 48px;
+}
+
+.form-list {
+    display: flex;
+}
+
+.proration-builder--card {
+    min-height: 70%;
+    background-color: #DFE7ED;
+}
