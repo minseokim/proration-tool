@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Form, Input, InputNumber } from 'antd';
-import { MinusOutlined } from '@ant-design/icons';
+import { MinusCircleOutlined } from '@ant-design/icons';
 import { Investment, FieldData } from '../../typeDefs';
-
+import './InvestorToggleForm.css';
 interface InvestorToggleFormProps {
   onRemoveInvestment: (id: string) => void;
   onUpdateInvestment: (
@@ -21,13 +21,9 @@ export const InvestorToggleForm = ({
   onRemoveInvestment,
   onUpdateInvestment,
 }: InvestorToggleFormProps) => {
-  //   const onValuesChange = (evt) => {
-  //     console.log('evt values change :', evt);
-  //   };
   const { id, name, requested_amount, average_amount } = investment;
 
   const onFieldsChange = (allFields: FieldData[]) => {
-    console.log('allFields :', allFields);
     const [nameField, requestedAmountField, averageAmountField] = allFields;
     onUpdateInvestment(
       id,
@@ -37,9 +33,15 @@ export const InvestorToggleForm = ({
     );
   };
 
-  // Needs to hold state for
   return (
-    <>
+    <Form
+      className='investor-toggle-form'
+      layout='inline'
+      onFieldsChange={(changedFields, allFields) =>
+        onFieldsChange(allFields as FieldData[])
+      }
+      initialValues={{ name, requested_amount, average_amount }}
+    >
       <Form.Item label='Name' name='name'>
         <Input value={name} />
       </Form.Item>
@@ -52,9 +54,9 @@ export const InvestorToggleForm = ({
       {index ? (
         <Button
           onClick={() => onRemoveInvestment(id)}
-          icon={<MinusOutlined />}
+          icon={<MinusCircleOutlined />}
         ></Button>
       ) : null}
-    </>
+    </Form>
   );
 };

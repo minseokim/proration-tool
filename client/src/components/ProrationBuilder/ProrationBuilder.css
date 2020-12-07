@@ -3,8 +3,8 @@
     padding: 48px;
 }
 
-.form-list {
-    display: flex;
+.probation-builder--form-list {
+    margin-bottom: 24px;
 }
 
 .proration-builder--card {

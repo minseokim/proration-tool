@@ -79,7 +79,6 @@ export const getProratedAmount = (
       }
       leftOverAllocation -= proratedAmount;
 
-      // Update
       let prevProratedAmount = proratedData[investment.name];
       proratedData[investment.name] = prevProratedAmount
         ? (prevProratedAmount += proratedAmount)

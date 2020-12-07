@@ -1,4 +1,5 @@
-import { v4 as uuidv4 } from 'uuid';
+import { nanoid } from 'nanoid';
+
 export interface Investment {
   id: string;
   name: string;
@@ -7,7 +8,8 @@ export interface Investment {
 }
 
 export const createInvestment = (
-  id = uuidv4(),
+  // Generate unique ID for each new investment
+  id = nanoid(),
   name = '',
   requested_amount = 0,
   average_amount = 0
@@ -29,4 +31,8 @@ export interface InvestmentData {
 export interface ProrateRequest {
   allocation_amount: number;
   investor_amounts: InvestmentData[];
+}
+
+export interface ProratedAmount {
+  [key: string]: number;
 }

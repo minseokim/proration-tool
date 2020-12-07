@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Card, InputNumber, Form, Button, Input, Space } from 'antd';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Card, InputNumber, Form, Button } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 
 import {
   Investment,
@@ -8,12 +8,18 @@ import {
   ProrateRequest,
   FieldData,
   InvestmentData,
+  ProratedAmount,
 } from '../../typeDefs';
 import { prorateFetch } from '../../lib';
 
 import './ProrationBuilder.css';
+import { InvestorToggleForm } from '../InvestorToggleForm';
 
-export const ProrationBuilder = () => {
+interface ProrationBuilderProps {
+  onProrateClick: (proratedAmount: ProratedAmount) => void;
+}
+
+export const ProrationBuilder = ({ onProrateClick }: ProrationBuilderProps) => {
   const [allocationAmount, setAllocationAmount] = useState<number>(0);
   const [investmentList, setInvestmentList] = useState<Investment[]>([
     createInvestment(),
@@ -64,7 +70,7 @@ export const ProrationBuilder = () => {
   const handleProrate = () => {
     prorateFetch(generateProrateRequest(allocationAmount, investmentList))
       .then((res) => {
-        console.log('result :', res);
+        onProrateClick(res);
       })
       .catch((err) => {
         console.log('error :', err);
@@ -90,64 +96,33 @@ export const ProrationBuilder = () => {
           <Form.Item label='Total Available Allocation' name='allocationAmount'>
             <InputNumber />
           </Form.Item>
-          {/* List of Investment Forms */}
-          <Form.List name='investments'>
-            {(fields, { add, remove }) => {
-              return (
-                <>
-                  {investmentList?.map((investment, index) => {
-                    return (
-                      <div key={investment.id} className='form-list'>
-                        <Space>
-                          <Form.Item label='Name' name='name'>
-                            <Input value={investment.name} />
-                          </Form.Item>
-                          <Form.Item
-                            label='Requested Amount'
-                            name='requested_amount'
-                          >
-                            <InputNumber />
-                          </Form.Item>
-                          <Form.Item
-                            label='Average Amount'
-                            name='average_amount'
-                          >
-                            <InputNumber />
-                          </Form.Item>
-                          <Form.Item>
-                            {index ? (
-                              <Button
-                                icon={<MinusCircleOutlined />}
-                                onClick={() => {
-                                  handleRemoveInvestment(investment.id);
-                                }}
-                              ></Button>
-                            ) : null}
-                          </Form.Item>
-                        </Space>
-                      </div>
-                    );
-                  })}
-                  <Form.Item>
-                    <Button
-                      type='dashed'
-                      onClick={handleAddInvestment}
-                      block
-                      icon={<PlusOutlined />}
-                    >
-                      Add Investor
-                    </Button>
-                  </Form.Item>
-                </>
-              );
-            }}
-          </Form.List>
-          <Form.Item>
-            <Button type='primary' onClick={handleProrate}>
-              Prorate
-            </Button>
-          </Form.Item>
         </Form>
+        {/* List of Investment Forms */}
+        <div className='probation-builder--form-list'>
+          {investmentList?.map((investment, index) => {
+            return (
+              <InvestorToggleForm
+                key={investment.id}
+                index={index}
+                investment={investment}
+                onRemoveInvestment={handleRemoveInvestment}
+                onUpdateInvestment={handleUpdateInvestment}
+              />
+            );
+          })}
+        </div>
+
+        <Button
+          type='dashed'
+          onClick={handleAddInvestment}
+          block
+          icon={<PlusOutlined />}
+        >
+          Add Investor
+        </Button>
+        <Button type='primary' onClick={handleProrate}>
+          Prorate
+        </Button>
       </Card>
     </div>
   );
