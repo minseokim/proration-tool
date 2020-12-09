@@ -3,13 +3,20 @@ import { ProrationBuilder } from '../ProrationBuilder';
 import { ProrationSummary } from '../ProrationSummary';
 import './ProrationTool.css';
 import { Row, Col } from 'antd';
-import { ProratedAmount } from '../../typeDefs';
+import { ProrateRequest, ProratedAmount } from '../../typeDefs';
+import { prorateFetch } from '../../lib';
 
 export const ProrationTool = () => {
   const [proratedAmount, setProratedAmount] = useState<ProratedAmount>({});
 
-  const handleProrate = (proratedAmount: ProratedAmount) => {
-    setProratedAmount(proratedAmount);
+  const handleProrate = (prorateRequest: ProrateRequest) => {
+    prorateFetch(prorateRequest)
+      .then((res) => {
+        setProratedAmount(res);
+      })
+      .catch((err) => {
+        console.error('error :', err);
+      });
   };
 
   return (

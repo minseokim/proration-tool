@@ -16,7 +16,7 @@ import './ProrationBuilder.css';
 import { InvestorToggleForm } from '../InvestorToggleForm';
 
 interface ProrationBuilderProps {
-  onProrateClick: (proratedAmount: ProratedAmount) => void;
+  onProrateClick: (proratedRequest: ProrateRequest) => void;
 }
 
 export const ProrationBuilder = ({ onProrateClick }: ProrationBuilderProps) => {
@@ -67,16 +67,6 @@ export const ProrationBuilder = ({ onProrateClick }: ProrationBuilderProps) => {
     };
   };
 
-  const handleProrate = () => {
-    prorateFetch(generateProrateRequest(allocationAmount, investmentList))
-      .then((res) => {
-        onProrateClick(res);
-      })
-      .catch((err) => {
-        console.log('error :', err);
-      });
-  };
-
   const handleAllocationChange = (allFields: FieldData[]) => {
     const [allocationAmountField] = allFields;
     setAllocationAmount(allocationAmountField.value);
@@ -121,7 +111,14 @@ export const ProrationBuilder = ({ onProrateClick }: ProrationBuilderProps) => {
         >
           Add Investor
         </Button>
-        <Button type='primary' onClick={handleProrate}>
+        <Button
+          type='primary'
+          onClick={() => {
+            onProrateClick(
+              generateProrateRequest(allocationAmount, investmentList)
+            );
+          }}
+        >
           Prorate
         </Button>
       </Card>
