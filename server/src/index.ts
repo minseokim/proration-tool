@@ -1,6 +1,6 @@
 import express from 'express';
-import { getProratedAmount } from './lib/prorate';
-import { InvestmentData } from './lib/types';
+import { getProratedAmount } from './lib';
+import { InvestmentData } from './typeDefs';
 const app = express();
 const PORT = 8000;
 

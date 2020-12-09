@@ -11,3 +11,7 @@
     min-height: 70%;
     background-color: #DFE7ED;
 }
+
+.proration-builder--add-investor-btn {
+    margin-bottom: 24px;
+}

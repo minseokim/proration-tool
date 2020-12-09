@@ -113,6 +113,7 @@ export const ProrationBuilder = ({ onProrateClick }: ProrationBuilderProps) => {
         </div>
 
         <Button
+          className='proration-builder--add-investor-btn'
           type='dashed'
           onClick={handleAddInvestment}
           block

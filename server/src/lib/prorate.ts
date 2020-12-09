@@ -1,5 +1,4 @@
-import { inputFour, inputOne, inputThree, inputTwo } from '../mockData/input_1';
-import { InvestmentData, ProratedData, Investment } from './types';
+import { InvestmentData, ProratedData, Investment } from '../typeDefs/types';
 
 const prorate = (
   allocationAmount: number,
@@ -28,7 +27,8 @@ export const getProratedAmount = (
     0
   );
 
-  const recurse = (
+  // Recursive function that iterates over investment amounts, and calculates prorated amounts for each investor
+  const calculateProratedAmounts = (
     allocationAmount: number,
     averageAmountSum: number,
     investorAmounts: Investment[]
@@ -85,17 +85,13 @@ export const getProratedAmount = (
         : proratedAmount;
     }
 
-    recurse(leftOverAllocation, newAverageAmountTotal, investorAmounts);
+    calculateProratedAmounts(
+      leftOverAllocation,
+      newAverageAmountTotal,
+      investorAmounts
+    );
   };
 
-  recurse(allocationAmount, averageAmountSum, investorAmounts);
+  calculateProratedAmounts(allocationAmount, averageAmountSum, investorAmounts);
   return proratedData;
 };
-
-// getProratedAmount(inputOne);
-// // console.log('--------');
-// getProratedAmount(inputTwo);
-// // console.log('--------');
-// getProratedAmount(inputThree);
-// // console.log('--------');
-// getProratedAmount(inputFour);
